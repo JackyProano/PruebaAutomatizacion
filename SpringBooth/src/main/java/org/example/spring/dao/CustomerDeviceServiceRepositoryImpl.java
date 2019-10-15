@@ -93,5 +93,7 @@ public class CustomerDeviceServiceRepositoryImpl implements CustomerDeviceServic
         em.remove(customerDeviceService);
 
     }
-
+    
+    
+    
  }

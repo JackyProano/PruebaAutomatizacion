@@ -1,6 +1,8 @@
 package org.example.spring;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.ws.rs.Produces;
 import org.example.spring.dao.CustomerDeviceRepositoryImpl;
@@ -61,15 +63,27 @@ public class CustomerServiceController {
         }
 
     }
-    
+
+    @GetMapping("/add/{cardId}/{name}/{typeService}")
+    @Produces("application/jsoon")
+    public ResponseEntity<List> addService(@PathVariable String cardId, @PathVariable String name, @PathVariable String typeService) {
+        try {
+            customerService.addService(cardId, name, typeService);
+            return new ResponseEntity("ser creo el servicio", HttpStatus.OK);
+        } catch (ServiceException | CustomerException ex) {
+            return new ResponseEntity(ex.getMessage(), HttpStatus.OK);
+        }
+
+    }
+
     @GetMapping("/getCost/{cardId}")
     @Produces("application/jsoon")
-    public ResponseEntity<List> getCost(@PathVariable String cardId){
+    public ResponseEntity<List> getCost(@PathVariable String cardId) {
         try {
-            return  new ResponseEntity(customerService.getCost(cardId),HttpStatus.OK);
+            return new ResponseEntity(customerService.getCost(cardId), HttpStatus.OK);
         } catch (ServiceException ex) {
-            return  new ResponseEntity(ex.getMessage(),HttpStatus.OK);
+            return new ResponseEntity(ex.getMessage(), HttpStatus.OK);
         }
-    
-    } 
+
+    }
 }

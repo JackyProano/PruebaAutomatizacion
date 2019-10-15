@@ -18,6 +18,7 @@ import org.example.spring.exception.ServiceException;
 import org.example.spring.model.CostService;
 import org.example.spring.model.CustomerDevice;
 import org.example.spring.model.CustomerDeviceService;
+import org.example.spring.model.IntelligentService;
 import org.example.spring.model.ServiceIntellegentEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,6 +37,10 @@ public class CustomerDeviceServiceOperation {
     CustomerDeviceRepositoryImpl customerDeviceRepositoryImpl;
     @Autowired
     CostServiceRepositoryImpl costServiceRepositoryImpl;
+    @Autowired
+    IntelligentServiceImpl intelligentServiceImpl;
+    @Autowired
+    CustomerDeviceServiceRepositoryImpl customerDeviceServiceRepositoryImpl;
 
     public List<CustomerDeviceService> getAll(String cardId) {
         return customDeviceService.findByCustomerService(cardId);
@@ -121,6 +126,24 @@ public class CustomerDeviceServiceOperation {
             codeDevices.add(codeDevice.getCode());
         });
         return codeDevices;
+    }
+
+    @Transactional
+    public void addService(String cardId, String name, String typeService) throws CustomerException, ServiceException {
+        List<CustomerDevice> customerDevices = customerDeviceRepositoryImpl.findByCarIdAndNameDevide(cardId, name);
+        if (customerDevices.isEmpty()) {
+            throw new CustomerException("No existe el customer");
+        }
+        if (typeService.isEmpty()) {
+            throw new ServiceException("not exist type service");
+        }
+        IntelligentService intelligentService = intelligentServiceImpl.getIntelligentService(ServiceIntellegentEnum.valueOf(typeService));
+        if (intelligentService == null) {
+            throw new ServiceException("not exist type service");
+        }
+        CustomerDeviceService customerDeviceService = new CustomerDeviceService(intelligentService.getPrice(), customerDevices.get(0), intelligentService);
+        customerDeviceServiceRepositoryImpl.add(customerDeviceService);
+
     }
 
 }
