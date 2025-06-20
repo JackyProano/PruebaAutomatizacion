@@ -32,7 +32,7 @@ public class CustomerController {
     @Produces("application/jsoon")
     public ResponseEntity<List> getCustomer(@PathVariable String cardId) {
         return new ResponseEntity(customerService.getCustomerById(cardId), HttpStatus.OK);
-        //return new ResponseEntity("PRUEBAAUTOMATIZACION", HttpStatus.OK);
+        //return new ResponseEntity("PRUEBA-AUTOMATIZACION", HttpStatus.OK);
     }
 
 //    @RequestMapping("/deletePeople")
